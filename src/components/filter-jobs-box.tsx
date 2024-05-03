@@ -9,7 +9,7 @@ import {
 
 import { useState } from "react";
 
-const names = [
+const rolesDesc = [
   "Humaira Sims",
   "Santiago Solis",
   "Dawid Floyd",
@@ -20,6 +20,19 @@ const names = [
   "Mariah Hickman",
   "Rocco Richardson",
   "Harris Glenn",
+];
+
+const modeDesc = ["Remote", "Hybrid", "In-office"];
+const salaryDesc = ["0L", "10L", "20L", "30L", "40L", "50L", "60L", "70L"];
+const expDesc = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+const noOfEmpDesc = [
+  "1-10",
+  "11-20",
+  "21-50",
+  "51-100",
+  "101-200",
+  "201-500",
+  "500+",
 ];
 
 export default function FilterJobs() {
@@ -33,7 +46,7 @@ export default function FilterJobs() {
           size="small"
           sx={{ minWidth: 150 }}
           multiple
-          options={names}
+          options={rolesDesc}
           getOptionLabel={(option) => option}
           disableCloseOnSelect
           renderInput={(params) => (
@@ -58,7 +71,7 @@ export default function FilterJobs() {
           size="small"
           sx={{ width: 250 }}
           multiple
-          options={names}
+          options={noOfEmpDesc}
           getOptionLabel={(option) => option}
           disableCloseOnSelect
           renderInput={(params) => (
@@ -87,7 +100,7 @@ export default function FilterJobs() {
           size="small"
           sx={{ width: 150 }}
           multiple
-          options={names}
+          options={expDesc}
           getOptionLabel={(option) => option}
           disableCloseOnSelect
           renderInput={(params) => (
@@ -116,7 +129,7 @@ export default function FilterJobs() {
           size="small"
           sx={{ width: 120 }}
           multiple
-          options={names}
+          options={modeDesc}
           getOptionLabel={(option) => option}
           disableCloseOnSelect
           renderInput={(params) => (
@@ -141,7 +154,7 @@ export default function FilterJobs() {
           size="small"
           sx={{ width: 200 }}
           multiple
-          options={names}
+          options={salaryDesc}
           getOptionLabel={(option) => option}
           disableCloseOnSelect
           renderInput={(params) => (
@@ -170,7 +183,7 @@ export default function FilterJobs() {
           size="small"
           sx={{ width: 200 }}
           multiple
-          options={names}
+          options={rolesDesc}
           getOptionLabel={(option) => option}
           disableCloseOnSelect
           renderInput={(params) => (
