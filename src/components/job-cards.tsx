@@ -1,4 +1,4 @@
-import { Box, Card, Typography, Button } from "@mui/material";
+import { Box, Card, Typography, Button, Chip } from "@mui/material";
 import { Job } from "../types";
 
 interface Props {
@@ -8,9 +8,9 @@ interface Props {
 export default function JobCards({ jobs }: Props) {
   return (
     <>
-      {jobs.map((job, index) => (
+      {jobs.map((job) => (
         <Card
-          key={index}
+          key={job.jdUid}
           variant="elevation"
           sx={{
             width: 250,
@@ -25,7 +25,7 @@ export default function JobCards({ jobs }: Props) {
         >
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Typography>{job.companyName}</Typography>
-            <Typography> {job.jobRole} Position Name</Typography>
+            <Typography> {job.jobRole} </Typography>
             <Typography>
               {job.location} | {job.minExp}-{job.maxExp}
             </Typography>
@@ -50,23 +50,22 @@ export default function JobCards({ jobs }: Props) {
             <span
               style={{
                 width: "100%",
-                height: "50px",
                 textAlign: "center",
                 position: "absolute",
                 left: "50%",
-                bottom: "-30px",
+                bottom: "-20px",
                 color: "#4943da",
                 transform: "translate(-50%, -50%)",
-                display: "block",
+                display: "inline-flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "10px",
                 background: "white",
-                maskImage:
-                  "linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0))",
-                maskPosition: "top top",
+                opacity: 0.9,
+                cursor: "pointer",
               }}
             >
-              <span style={{ padding: "2px", background: "white" }}>
-                View Job
-              </span>
+              <Chip sx={{ padding: "2px" }} label={"View Job"} />
             </span>
           </Box>
           {job.minExp ? (

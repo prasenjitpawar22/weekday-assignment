@@ -8,8 +8,15 @@ import { Job } from "./types";
 function App() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState<number>(0);
   const loaderRef = useRef(null);
+  const [roles, setRoles] = useState<string[]>([]);
+  const [noOfEmp, setNoOfEmp] = useState<string[]>([]);
+  const [exp, setExp] = useState<number[]>([]);
+  const [mode, setMode] = useState<string[]>([]);
+  const [salary, setSalary] = useState<number[]>([]);
+  const [company, setCompany] = useState<string>("");
+  const [filterJobs, setFilterJobs] = useState<Job[]>([]);
 
   const handleObserver = async (entries: IntersectionObserverEntry[]) => {
     const target = entries[0];
@@ -37,25 +44,22 @@ function App() {
   async function getJobs() {
     try {
       setLoading(true);
-
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
-      const raw = JSON.stringify({ limit: 10, offset: offset });
 
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-      };
       const response = await fetch(
         `https://api.weekday.technology/adhoc/getSampleJdJSON`,
-        requestOptions
+        {
+          method: "POST",
+          headers: myHeaders,
+          body: JSON.stringify({ limit: 10, offset }),
+        }
       );
 
       const data = await response.json();
       if (data.jdList) {
         setJobs((prev) => [...prev, ...(data.jdList as Job[])]);
-        setOffset((prev) => prev + 10);
+        setOffset(offset + 10);
       }
     } catch (error) {
       console.log(error);
@@ -64,16 +68,67 @@ function App() {
     }
   }
 
-  // useEffect(() => {
-  //   (async () => {
-  //     await getJobs();
-  //   })();
-  // }, []);
+  useEffect(() => {
+    handleJobFilter();
+    console.log(noOfEmp, exp, company, salary, mode, roles);
+  }, [noOfEmp, exp, company, salary, mode, roles]);
+
+  useEffect(() => {
+    console.log(filterJobs);
+  }, [filterJobs]);
+
+  useEffect(() => {
+    handleJobFilter();
+  }, [jobs]);
+
+  function handleJobFilter() {
+    let updateJobsList = jobs.filter((job) => {
+      // exp
+      if (exp.length && job.maxExp) {
+        const maxExp = Math.max(...exp);
+        if (job.maxExp > maxExp) return false;
+      }
+
+      // salary
+      if (salary.length && job.maxJdSalary) {
+        let maxS = Math.max(...salary);
+        if (job.maxJdSalary < maxS) return false;
+      }
+
+      // mode
+      if (mode.length && job.location) {
+        if (mode.includes("Hybrid") && job.location !== "Hybrid") return false;
+        if (mode.includes("Remote") && job.location !== "Remote") return false;
+      }
+
+      // no of emp
+
+      // role
+      if (roles.length && job.jobRole) {
+        if (!roles.includes(job.jobRole.toLowerCase())) return false;
+      }
+
+      // comp.
+      if (company.length && job.companyName) {
+        if (company.toLowerCase() !== job.companyName.toLowerCase())
+          return false;
+      }
+      return true;
+    });
+    setFilterJobs(updateJobsList);
+  }
 
   return (
     <Container>
       <Grid sx={{ my: 2 }}>
-        <FilterJobs />
+        <FilterJobs
+          setCompany={setCompany}
+          setExp={setExp}
+          setMode={setMode}
+          setNoOfEmp={setNoOfEmp}
+          setRoles={setRoles}
+          setSalary={setSalary}
+        />
       </Grid>
       <Grid
         sx={{
@@ -84,7 +139,7 @@ function App() {
           alignItems: "start",
         }}
       >
-        <JobCards jobs={jobs} />
+        <JobCards jobs={filterJobs} />
       </Grid>
       <div ref={loaderRef}>{loading && "Loading..."}</div>
     </Container>
