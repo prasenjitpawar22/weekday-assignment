@@ -80,7 +80,7 @@ export default function FilterJobs({
           renderInput={(params) => (
             <TextField {...params} variant="outlined" placeholder="Roles" />
           )}
-          onChange={(e, v, r) => {
+          onChange={({}, v) => {
             const roles = v.map((_) => _.role);
             setRoles(roles);
           }}
@@ -112,7 +112,7 @@ export default function FilterJobs({
               placeholder="Number Of Employes"
             />
           )}
-          onChange={(e, v, r) => setNoOfEmp(v)}
+          onChange={({}, v) => setNoOfEmp(v)}
           renderOption={(props, option) => (
             <MenuItem
               {...props}
@@ -142,7 +142,7 @@ export default function FilterJobs({
               placeholder="Experience"
             />
           )}
-          onChange={(e, v, r) => setExp(v)}
+          onChange={({}, v) => setExp(v)}
           renderOption={(props, option) => (
             <MenuItem
               {...props}
@@ -168,7 +168,7 @@ export default function FilterJobs({
           renderInput={(params) => (
             <TextField {...params} variant="outlined" placeholder="Remote" />
           )}
-          onChange={(e, v, r) => setMode(v)}
+          onChange={({}, v) => setMode(v)}
           renderOption={(props, option) => (
             <MenuItem
               {...props}
@@ -197,7 +197,7 @@ export default function FilterJobs({
               placeholder="Minimum Base Salary"
             />
           )}
-          onChange={(e, v, r) => {
+          onChange={({}, v) => {
             const s = v.map((_) => _.v);
             setSalary(s);
           }}
