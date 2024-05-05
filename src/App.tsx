@@ -8,7 +8,7 @@ import { Job } from "./types";
 function App() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
-  const [offset, setOffset] = useState<number>(0);
+  const [offset, setOffset] = useState<number>(-10);
   const loaderRef = useRef(null);
   const [roles, setRoles] = useState<string[]>([]);
   const [noOfEmp, setNoOfEmp] = useState<string[]>([]);
@@ -21,9 +21,18 @@ function App() {
   const handleObserver = async (entries: IntersectionObserverEntry[]) => {
     const target = entries[0];
     if (target.isIntersecting && !loading) {
-      await getJobs();
+      setOffset((no) => no + 10);
     }
   };
+
+  // when offset changes, call api
+  useEffect(() => {
+    (async () => {
+      if (offset >= 0) {
+        await getJobs();
+      }
+    })();
+  }, [offset]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
@@ -59,7 +68,6 @@ function App() {
       const data = await response.json();
       if (data.jdList) {
         setJobs((prev) => [...prev, ...(data.jdList as Job[])]);
-        setOffset(offset + 10);
       }
     } catch (error) {
       console.log(error);
